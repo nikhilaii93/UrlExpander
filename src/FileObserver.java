@@ -18,7 +18,7 @@ public class FileObserver {
 	// private static Logger log = Logger.getLogger(FileObserver.class);
 	// private int numberOfThread;
 	private ExecutorService pool;
-	private CompletionService<ArrayList<String>> completionService;
+	private CompletionService<String> completionService;
 
 	/**
 	 * Constructor to accept thread for ThreadPool
@@ -28,47 +28,54 @@ public class FileObserver {
 	public FileObserver(int numberOfThread) {
 		// this.numberOfThread = numberOfThread;
 		this.pool = Executors.newScheduledThreadPool(numberOfThread);
-		completionService = new ExecutorCompletionService<ArrayList<String>>(pool);
+		completionService = new ExecutorCompletionService<String>(pool);
 	}
 
 	/**
 	 * Method to extract file line by line and to fill sub task queue.
-	 * @throws ExecutionException 
+	 * 
+	 * @throws ExecutionException
 	 */
-	public void extractFile(String fileName, String outFile) throws ExecutionException {
+	public void extractFile(String fileName, String outFile, UrlVerification verificationObject)
+			throws ExecutionException {
 		BufferedReader in = null;
-		ArrayList<Future<ArrayList<String>>> futures = new ArrayList<Future<ArrayList<String>>>();
+		ArrayList<Future<String>> futures = new ArrayList<Future<String>>();
 		try {
 			in = new BufferedReader(new FileReader(fileName));
 			String str;
 			int readLineCount = 0;
 			while ((str = in.readLine()) != null) {
 				readLineCount++;
-				futures.add(completionService.submit(new FileRunnable(str)));
-				if (readLineCount%100 == 0) {
+				futures.add(completionService.submit(new FileCallable(str, verificationObject)));
+				if (readLineCount%10000 == 0) {
 					System.out.println("ReadLineCount: " + readLineCount);
 				}
 			}
-			
+
 			int writtenLineCount = 0;
 			for (int i = 0; i < futures.size(); i++) {
-				Future<ArrayList<String>> next;
+				Future<String> next;
 				try {
 					next = completionService.take();
-					ArrayList<String> textUrls = next.get();
-					int a = writtenLineCount/100;
-					writtenLineCount += textUrls.size();
-					int b = writtenLineCount/100;
-					if (b == a+1) {
-						System.out.println ("WrittenLineCount: " + writtenLineCount);
+					String allDomains = next.get();
+					
+					if (i%10000 == 0) {
+						System.out.println("Lines processed: " + i);
 					}
-					WriteOutput.writeFile(textUrls, outFile);
+					
+					if (!allDomains.equals("")) {
+						writtenLineCount++;
+						if (writtenLineCount%100 == 0) {
+							System.out.println("WrittenLineCount: " + writtenLineCount);
+						}
+						WriteOutput.writeFile(allDomains, outFile);
+					}
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			
+
 			in.close();
 			pool.shutdownNow();
 		} catch (IOException e) {

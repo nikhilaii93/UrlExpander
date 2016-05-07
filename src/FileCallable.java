@@ -1,14 +1,16 @@
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
-public class FileRunnable implements Callable<ArrayList<String>> {
+public class FileCallable implements Callable<String> {
 	private String line;
-
-	public FileRunnable(String line) {
+	UrlVerification verificationObject;
+	
+	public FileCallable(String line, UrlVerification verificationObject) {
 		this.line = line;
+		this.verificationObject = verificationObject;
 	}
 
-	public ArrayList<String> call() {
+	public String call() {
 		// Handle record here to validate and store.
 		ArrayList<String> urls = UrlExtractor.extractUrls(line);
 		ArrayList<String> expandedUrls = new ArrayList<String>();
@@ -19,7 +21,7 @@ public class FileRunnable implements Callable<ArrayList<String>> {
 				if (expandedUrl == null) {
 					expandedUrl = urls.get(i);
 				}
-				expandedUrls.add(urls.get(i) + " ---> " + expandedUrl);
+				expandedUrls.add(expandedUrl);
 				// System.out.println(urls.get(i) + " ---> " + expandedUrl);
 			} catch (Exception e) {
 				System.out.println("URL Error Occured: " + urls.get(i));
@@ -29,7 +31,12 @@ public class FileRunnable implements Callable<ArrayList<String>> {
 		if (line.equalsIgnoreCase("Exception"))
 			throw new RuntimeException("File reading Exception");
 		// log.debug(line);
+		String match = verificationObject.getMatch(expandedUrls);
 		
-		return expandedUrls;
+		if (!match.equals("")) {
+			return match+line;
+		} else {
+			return match;
+		}
 	}
 }

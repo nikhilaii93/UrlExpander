@@ -18,6 +18,7 @@ do
 	for x in $XFILES
 	do
 		TARGET=$BASEDIR$SEPARATOR$FILENAME$SUFFIX$j$EXT
+		# spaces in the target removed pathname removed
 		mv "$x" "${TARGET// /}"
 		j=$(($j+1))
 	done

@@ -8,7 +8,7 @@ SEPARATOR="/"
 JARPATH="UrlExpander.jar"
 # store current .txt files so that extra created files are not processed
 CURRENT_FILES=$(ls *.txt)
-for file in CURRENT_FILES
+for file in $CURRENT_FILES
 do
 	FILENAME="${file%.*}"
 	TARGET=$BASEDIR$SUFFIX$SEPARATOR$FILENAME$SUFFIX$EXT

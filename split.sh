@@ -2,20 +2,23 @@
 # splits file in a directory to files with lines 1500000
 # run in directory where files are to be split
 #BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BASEDIR='pwd -P'
+BASEDIR=$(pwd)
 SEPARATOR="/"
 SUFFIX="_s"
 EXT=".txt"
 i=1
-for file in *.txt
+CURRENT_TXT=$(ls *.txt)
+for file in $CURRENT_TXT
 do
 	FILENAME="${file%.*}"
 	split -l 1500000 $file
 	# rename files as required
 	j=1
-	for x in 'ls x* | sort'
+	XFILES=$('ls x* | sort')
+	for x in $XFILES
 	do
-		mv $x $BASEDIR$SEPARATOR$FILENAME$SUFFIX$j$EXT
+		TARGET=$BASEDIR$SEPARATOR$FILENAME$SUFFIX$j$EXT
+		mv "$x" "${TARGET// /}"
 		j=$(($j+1))
 	done
 	i=$((i+1))

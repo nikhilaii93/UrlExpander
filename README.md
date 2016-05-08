@@ -14,4 +14,10 @@ NUM_THREADS: Keep it so as to obtain CPU usage around 100%, for 4 cores and 8 GB
 PathOfTweetsFile: Path of the file to be processed
 PathOfOutputFile: Path of the output file, an empty file need not be created
 
+split.sh:
+it splits all text files in the current folder
+
+run.sh
+runs code for all data files, keep mediaDomains and jar in the same directory
+
 Enjoy!

@@ -3,7 +3,7 @@ import java.util.concurrent.ExecutionException;
 
 public class Main {
 	public static void main(String[] args) throws IOException, ExecutionException {
-		String domainsPath = "mediaDomains.txt";
+		String domainsPath = "mediaDomains";
 		UrlVerification verificationObject = new UrlVerification();
 		verificationObject.loadDomains(domainsPath);
 		

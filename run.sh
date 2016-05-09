@@ -12,5 +12,5 @@ for file in $CURRENT_FILES
 do
 	FILENAME="${file%.*}"
 	TARGET=$BASEDIR$SUFFIX$SEPARATOR$FILENAME$SUFFIX$EXT
-	java -jar $JARPATH 50 $file $TARGET
+	java -jar $JARPATH 1000 $file $TARGET
 done

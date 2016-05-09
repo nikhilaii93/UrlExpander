@@ -63,6 +63,10 @@ public class FileObserver {
 						System.out.println("Lines processed: " + i);
 					}
 					
+					if (futures.size()-i == 1000) {
+						new TimedTask(10);
+					}
+					
 					if (!allDomains.equals("")) {
 						writtenLineCount++;
 						if (writtenLineCount%100 == 0) {
@@ -75,7 +79,7 @@ public class FileObserver {
 					e.printStackTrace();
 				}
 			}
-
+			
 			in.close();
 			pool.shutdownNow();
 		} catch (IOException e) {

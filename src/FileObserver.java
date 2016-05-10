@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
@@ -36,7 +37,7 @@ public class FileObserver {
 	 * 
 	 * @throws ExecutionException
 	 */
-	public void extractFile(String fileName, String outFile, UrlVerification verificationObject)
+	public void extractFile(String fileName, String outFile, UrlVerification verificationObject, PrintWriter out)
 			throws ExecutionException {
 		BufferedReader in = null;
 		ArrayList<Future<String>> futures = new ArrayList<Future<String>>();
@@ -72,7 +73,7 @@ public class FileObserver {
 						if (writtenLineCount%100 == 0) {
 							System.out.println("WrittenLineCount: " + writtenLineCount);
 						}
-						WriteOutput.writeFile(allDomains, outFile);
+						WriteOutput.writeFile(allDomains, out);
 					}
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block

@@ -1,12 +1,10 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 
 public class WriteOutput {
-	public static void writeFile(String str, String file) {
+	public static void writeFile(String str, PrintWriter out) {
 
 		// Since file is to be appended several times we use this method
+		/*
 		try (FileWriter fw = new FileWriter(file, true);
 				BufferedWriter bw = new BufferedWriter(fw);
 				PrintWriter out = new PrintWriter(bw)) {
@@ -14,5 +12,7 @@ public class WriteOutput {
 		} catch (IOException e) {
 			System.out.println("Error in Writing File");
 		}
+		*/
+		out.println(str);
 	}
 }
